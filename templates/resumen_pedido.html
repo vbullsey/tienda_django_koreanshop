@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <main>
+    <div class="container">
+
+    <div class="table-responsive text-nowrap">
+    <h2>Resumen Pedido</h2>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Titulo Articulo</th>
+            <th scope="col">Precio Normal</th>
+            <th scope="col">Precio Descuento</th>
+             <th scope="col">Cantidad</th>
+            <th scope="col">Total Precio </th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for pedido_articulo in object.articulos.all %}
+        <tr>
+            <th scope="row">{{ forloop.counter }}</th>
+            <td>{{ pedido_articulo.articulo.titulo }}</td>
+            <td>{{ pedido_articulo.articulo.precio }}</td>
+            <td>{{ pedido_articulo.articulo.precio_descuento }}</td>
+            
+            <td>
+                <a href="{% url 'core:eliminar-uno-del-carrito' pedido_articulo.articulo.slug %}"><i class="fas fa-minus mr-2"></i></a>
+                {{ pedido_articulo.cantidad }}
+                <a href="{% url 'core:agregar-al-carrito' pedido_articulo.articulo.slug %}"><i class="fas fa-plus ml-2"></i></a>
+            </td>
+            <td>
+            {% if pedido_articulo.articulo.precio_descuento %}
+                $ {{ pedido_articulo.get_precio_total_descuento_articulo }}
+                <span class="badge badge-primary">Ahorrado ${{ pedido_articulo.get_cantidad_ahorrada }}</span>
+            {% else %}
+                $ {{ pedido_articulo.get_precio_final }}
+            {% endif %}
+            <a style='color: red;' href="{% url 'core:eliminar-del-carrito' pedido_articulo.articulo.slug %}">
+                <i class="fas fa-trash float-right"></i>
+            </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan='5'>Tu carrito está vácio</td>
+        </tr>
+        <tr>
+            <td colspan="5">
+            <a class='btn btn-primary float-right' href='/'>Continuar Comprando</a>
+            </td>
+        </tr>
+        {% endfor %}
+        {% if object.get_total %}
+        <tr>
+            <td colspan="5"><b><b>Total del Pedido</b></b></td>
+            <td><b><b>${{ object.get_total }}</b></b></td>
+        </tr>
+        <tr>
+            <td colspan="7">
+            <a class='btn btn-success float-right ml-3' href='/checkout/'>Ir a Pagar</a>
+            <a class='btn btn-primary float-right' href='/'>Continuar comprando</a>
+            </td>
+        </tr>
+        {% endif %}
+        </tbody>
+    </table>
+
+    <hr >
+    </div>
+
+    </div>
+  </main>
+
+{% endblock content %}
