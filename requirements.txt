@@ -24,7 +24,7 @@ django-widget-tweaks==1.4.3
 dnspython==1.16.0
 entrypoints==0.3
 env==0.1.0
-eventlet==0.25.1
+eventlet==0.31.0
 flake8==3.7.7
 greenlet==0.4.15
 idna==2.8
